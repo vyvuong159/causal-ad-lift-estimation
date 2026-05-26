@@ -1,0 +1,9 @@
+pandas
+polars
+econml
+lightgbm
+scikit-learn
+pysyncon
+numpy
+matplotlib
+seaborn

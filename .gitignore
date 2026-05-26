@@ -1,0 +1,27 @@
+# --- Python & Environment ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.env
+
+# --- Data & Large Files ---
+# Criteo dataset files (prevents accidental push of 13M rows)
+data/*.csv
+data/*.parquet
+data/*.gz
+data/*.zip
+
+# --- IDE & System ---
+.DS_Store
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# --- Documentation Artifacts ---
+# If you generate temporary logs or plots
+*.log
+*.png
+*.pdf
