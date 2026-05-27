@@ -20,6 +20,18 @@ class CriteoPreprocessor:
     """
     A modular preprocessing pipeline for the Criteo Uplift dataset.
     Uses Polars for high-performance and scikit-learn for standardization.
+
+    Causal Assumptions & Context for this dataset:
+    1. Unconfoundedness (Conditional Ignorability): Y(0), Y(1) ⊥ T | X. Since the raw Criteo Uplift
+       dataset is derived from a randomized controlled trial (RCT), treatment is randomly assigned,
+       meaning unconfoundedness holds unconditionally (Y(0), Y(1) ⊥ T). In standard observational settings, 
+       this requires that all variables that simultaneously affect treatment T and outcome Y are in X.
+    2. Common Support (Positivity): 0 < P(T=1 | X) < 1. Every individual must have a non-zero probability
+       of being in both treatment and control. In the Criteo RCT, this holds perfectly as treatment was
+       randomly targeted to ~85% of the population.
+    3. SUTVA (Stable Unit Treatment Value Assumption): The treatment assignment of one user does not
+       affect another user's outcome, and there are no multiple versions of the treatment. This is
+       assumed to hold at the individual level since user browsing/purchase decisions are independent.
     """
     
     def __init__(self, seed: int = SEED):
