@@ -46,7 +46,7 @@ Every user must have a non-zero probability of being in both the treated and con
 =================================================================
 ```
 
-> [!NOTE]
+> [!Note]
 > The complete overlap between the treated and control propensity distributions confirms that the **Common Support** assumption holds perfectly. The absence of boundary propensities ($<1\%$ or $>99\%$) guarantees that the Double Machine Learning (DML) estimator operates with low variance and is free from extrapolation bias.
 
 ---
@@ -59,7 +59,7 @@ The E-value measures the minimum strength of association (on the Risk Ratio scal
 * **Point Estimate E-value:** `2.319`
 * **95% Lower CI E-value:** `2.037`
 
-> [!IMPORTANT]
+> [!Note]
 > To explain away the observed causal ad-lift, an unobserved confounder would need to increase the likelihood of both targeting and conversion by **2.32-fold**. To invalidate the statistical significance (shifting the lower bound to 1.0), the confounder must still have a joint association of at least **2.04-fold**. Given that our features capture key user behaviors, it is highly unlikely that an unobserved confounder of this strength exists, proving that the finding is exceptionally robust.
 
 ### B. Non-parametric bootstrap stability test
@@ -116,7 +116,7 @@ We ran SCM on each control campaign (Campaigns 2–5) in the donor pool as if it
 
 $$\text{SCM Permutation p-value} = \frac{\sum_{j=1}^5 \mathbb{I}(\text{Ratio}_j \ge \text{Ratio}_{\text{treated}})}{5} = \mathbf{0.2000}$$
 
-> [!TIP]
+> [!Note]
 > Campaign 1 (Treated) has the highest post-to-pre RMSPE ratio in the entire panel, returning the minimum possible permutation p-value ($0.20$ with $N=5$ cohorts). This statistically confirms that Campaign 1's post-intervention divergence is highly anomalous and cannot be explained by pre-intervention fitting noise.
 
 ---
@@ -159,5 +159,5 @@ The pre-treatment fit determines the quality of the SCM counterfactual. We expli
 * **Pre-treatment Mean Squared Error (MSE):** `4.815034e-07`
 * **Pre-treatment Root Mean Squared Prediction Error (RMSPE):** `6.939045e-04`
 
-> [!IMPORTANT]
+> [!Note]
 > The extremely low pre-treatment RMSPE (`6.939e-04`) confirms that the synthetic campaign counterfactual tracks the actual treated campaign with near-perfect reliability before the launch of the personalization feature. This validates the post-intervention cohort lift measurement as a true causal divergence rather than pre-treatment fitting noise.
