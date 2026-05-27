@@ -21,8 +21,8 @@ def calculate_mde(df: pl.DataFrame, alpha: float = 0.05, power: float = 0.80) ->
     
     # Calculate group sizes
     n_total = len(df)
-    n_treated = int(df.filter(pl.col("treatment") == 1).len())
-    n_control = int(df.filter(pl.col("treatment") == 0).len())
+    n_treated = len(df.filter(pl.col("treatment") == 1))
+    n_control = len(df.filter(pl.col("treatment") == 0))
     
     # Calculate baseline conversion rate in control group (p0)
     p0 = df.filter(pl.col("treatment") == 0)["conversion"].mean()
