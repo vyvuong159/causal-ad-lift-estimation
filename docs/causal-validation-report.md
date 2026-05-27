@@ -1,6 +1,6 @@
 # Causal validation & Stress testing report
 
-This document presents a comprehensive statistical and econometric audit of the Causal Machine Learning pipeline deployed in this repository. By subjecting our causal estimators to rigorous falsification tests, sensitivity analyses, and resampling checks, we verify that the isolated ad-lift effect is statistically robust and holds up under conditions where the true effect is known to be zero.
+This document presents a statistical and econometric audit of the Causal Machine Learning pipeline deployed in this repository. By subjecting our causal estimators to falsification tests, sensitivity analyses, and resampling checks, we verify that the isolated ad-lift effect is statistically robust and holds up under conditions where the true effect is known to be zero.
 
 ---
 
@@ -22,7 +22,7 @@ This document presents a comprehensive statistical and econometric audit of the 
 
 ## 1. Causal assumptions & Propensity overlap diagnostics
 
-Observational causal inference relies fundamentally on the **Common support (Positivity)** assumption:
+Observational causal inference relies fundamentally on the Common support (Positivity) assumption:
 $$\epsilon < P(T = 1 \mid X) < 1 - \epsilon$$
 Every user must have a non-zero probability of being in both the treated and control groups to establish reliable counterfactual baselines. We evaluated this by fitting the propensity nuisance model `LGBMClassifier` using 3-fold cross-validation to generate honest, out-of-sample propensity scores.
 
@@ -47,7 +47,7 @@ Every user must have a non-zero probability of being in both the treated and con
 ```
 
 > [!Note]
-> The complete overlap between the treated and control propensity distributions confirms that the **Common Support** assumption holds perfectly. The absence of boundary propensities ($<1\%$ or $>99\%$) guarantees that the Double Machine Learning (DML) estimator operates with low variance and is free from extrapolation bias.
+> The complete overlap between the treated and control propensity distributions confirms that the Common Support assumption holds perfectly. The absence of boundary propensities ($<1\%$ or $>99\%$) guarantees that the Double Machine Learning (DML) estimator operates with low variance and is free from extrapolation bias.
 
 ---
 
@@ -60,7 +60,7 @@ The E-value measures the minimum strength of association (on the Risk Ratio scal
 * **95% Lower CI E-value:** `2.037`
 
 > [!Note]
-> To explain away the observed causal ad-lift, an unobserved confounder would need to increase the likelihood of both targeting and conversion by **2.32-fold**. To invalidate the statistical significance (shifting the lower bound to 1.0), the confounder must still have a joint association of at least **2.04-fold**. Given that our features capture key user behaviors, it is highly unlikely that an unobserved confounder of this strength exists, proving that the finding is exceptionally robust.
+> To explain away the observed causal ad-lift, an unobserved confounder would need to increase the likelihood of both targeting and conversion by 2.32-fold. To invalidate the statistical significance (shifting the lower bound to 1.0), the confounder must still have a joint association of at least 2.04-fold. Given that our features capture key user behaviors, it is highly unlikely that an unobserved confounder of this strength exists, proving that the finding is exceptionally robust.
 
 ### B. Non-parametric bootstrap stability test
 To test the empirical stability and standard error consistency of our DML model under resampling, we ran $B = 30$ bootstrap iterations drawing samples of size $n = 200,000$ with replacement:
@@ -108,7 +108,7 @@ We shifted SCM's intervention date to an earlier point (Day 10 instead of Day 20
 
 ### C. SCM in-space placebos & Permutation test
 We ran SCM on each control campaign (Campaigns 2–5) in the donor pool as if it were the treated campaign. We evaluated the post-to-pre RMSPE ratio for all campaigns:
-* **Campaign 1 (Treated):** Ratio = **`1.42`** (Pre-RMSPE = `6.9390e-04`, Post-RMSPE = `9.8545e-04`)
+* **Campaign 1 (Treated):** Ratio = `1.42` (Pre-RMSPE = `6.9390e-04`, Post-RMSPE = `9.8545e-04`)
 * **Campaign 2 (Control placebo):** Ratio = `0.80`
 * **Campaign 3 (Control placebo):** Ratio = `0.96`
 * **Campaign 4 (Control placebo):** Ratio = `0.88`
@@ -123,7 +123,7 @@ $$\text{SCM Permutation p-value} = \frac{\sum_{j=1}^5 \mathbb{I}(\text{Ratio}_j 
 
 ## 4. Feature heterogeneity & Multiple testing correction
 
-EconML's `LinearDML` prints the feature moderation coefficients in its summary table. Because we test 12 separate feature hypotheses simultaneously, the family-wise false positive rate is inflated to ~46%. We implemented **Bonferroni** and **Benjamini-Hochberg (BH-FDR)** corrections.
+EconML's `LinearDML` prints the feature moderation coefficients in its summary table. Because we test 12 separate feature hypotheses simultaneously, the family-wise false positive rate is inflated to ~46%. We implemented Bonferroni and Benjamini-Hochberg (BH-FDR) corrections
 
 ```
 ================================================================================
@@ -148,7 +148,7 @@ f11        | -0.021045  | 0.022987 | 3.5989e-01 | 1.0000e+00 | 8.6346e-01 | no
 ================================================================================
 ```
 
-* **Significant moderator:** **`f3`** is the **only** feature that remains a highly statistically significant moderator under both Bonferroni correction and BH-FDR correction ($q < 0.001$)
+* **Significant moderator:** `f3` is the only feature that remains a highly statistically significant moderator under both Bonferroni correction and BH-FDR correction ($q < 0.001$)
 * **Falsification result:** All other 11 features are successfully identified as non-significant moderators, correcting potential false discovery errors and providing a reliable footprint for feature-level targeting
 
 ---
